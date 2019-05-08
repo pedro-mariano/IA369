@@ -1,0 +1,7 @@
+Best Practices Journal
+
+Do's:
+
+Don'ts:
+
+- Take care with mathematical operations (such as division) with variables that will be used as indexes. They can turn into floats and generate errors, since indexes should be integers.
