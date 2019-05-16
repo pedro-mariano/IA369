@@ -4,8 +4,12 @@ Do's:
 
 - Make sure to keep track of seed values that were used to generate random numbers to guarantee reproducibility
 
+- If you are writing text in more than one language, make sure that every sentence is properly translated. Do not leave portions of the text available in only one language. This will avoid mistranslations by the readers.
+
 Don'ts:
 
 - A paper version of the notebook featuring only the final results will not reflect any changes made in the source code.
 
 - Take care with mathematical operations (such as division) with variables that will be used as indexes. They can turn into floats and generate errors, since indexes should be integers.
+
+- Do not use standard parameter values for built-in functions from Python libraries, since they can change in future updates. Always define explicitly every parameter value for each function used.
