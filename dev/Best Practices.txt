@@ -2,6 +2,10 @@ Best Practices Journal
 
 Do's:
 
+- Make sure to keep track of seed values that were used to generate random numbers to guarantee reproducibility
+
 Don'ts:
+
+- A paper version of the notebook featuring only the final results will not reflect any changes made in the source code.
 
 - Take care with mathematical operations (such as division) with variables that will be used as indexes. They can turn into floats and generate errors, since indexes should be integers.
