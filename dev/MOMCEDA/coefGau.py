@@ -1,6 +1,6 @@
 from numpy import *
 
-def coefGau(NPop,x=1):
+def calc_coefGau(NPop,x=1):
 # Coefficients of the gaussians of the mixture
 
     # Linear decay

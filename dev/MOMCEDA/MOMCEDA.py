@@ -17,7 +17,7 @@ import time
 ## Parameters ##
 
 NPop = 100 # Population size
-NEval = 20000 # Number of function evaluations
+NEval = 2000 # Number of function evaluations
 NGer = NEval/NPop - 1 # Number of generations
 Csize = 30 # Chromosome size
 NObj = 2 # Number of objectives to optimize
@@ -39,11 +39,11 @@ objRec = objectiveRecords(NObj,minim) # Records for objective values
 p = 99 # Number of objective axes divisions to generate structured ref. points
 Z = generateRefPoints(NObj, p) # Generate structured reference points
 rankType = 'hv' # Type of rank used for TOPSIS
-weight = array([0.0,0.0,3.0,5.0,1.0]) # Array of weights used for TOPSIS
+weight = array([0.0,3.0,5.0,10.0,1.0]) # Array of weights used for TOPSIS
 multiple = True #    multiple: use multiple criteria to select solutions from the last front
 sampleAll = True #sampleAll: if true, all members from parent population are sampled with the TOPSIS rank
-RTPlot = False # Plot the evolution of the population 
-nReps = 10 #number of repetitions
+RTPlot = True # Plot the evolution of the population 
+nReps = 1  #number of repetitions
  
 # Weight order: domCount, distRefPoint, rho, rank, distPareto
 
@@ -192,14 +192,14 @@ for nExec in arange(nReps,dtype=int):
     end = time.time()
     extime.append(end - start)
         
-    print 'Execution ',nExec+1,' - hypervolume = ',hvValues[nExec,-1]
+    print 'Execution ',nExec+1,' - Hypervolume = ',hvValues[nExec,-1]
     print 'Elapsed time: ',extime[-1]
 
     import json
-    with open(''.join(['pareto_front/zdt',function[3],'_front.json'])) as optimal_front_data:
+    with open(''.join(['MOMCEDA/pareto_front/zdt',function[3],'_front.json'])) as optimal_front_data:
         optimal_front = json.load(optimal_front_data)
 
-    print 'Convergence: ',convergence(Pt.obj.tolist(), optimal_front)
+    print 'Convergence metric: ',convergence(Pt.obj.tolist(), optimal_front)
 
 ##    normIgd,Zint = normIGDmetric(ZRef,objRec.objIdeal,a,Pt.obj,function)
 ##    igd = IGDmetric(ZRef,objRec.objIdeal,Pt.obj,function)[0]
@@ -212,14 +212,22 @@ for nExec in arange(nReps,dtype=int):
 ##    print 'NormIGD2 = {0:e}'.format(normIgd2)
 ##    print 'IGD2 = {0:e}'.format(igd2)
        
-    countFig = countFig + NObj*(NObj - 1)/2
-    with open(''.join(['Pareto/Prt_',function,'.pk1']), 'r') as filename:
-        f = pickle.load(filename)
+    
+##    with open(''.join(['Pareto/Prt_',function,'.pk1']), 'r') as filename:
+##        f = pickle.load(filename)
     ##step = len(f)/50
     ##plt.scatter(f[::step,0],f[::step,1],s=1,color='b')
+
+    plt.title('Population at execution %d' %(nExec+1))
+    f = array(optimal_front)
     Pt.plot(color(float(t)/NGer), scale, center, ObjNames, countFig)
-    plt.plot(f[:,0],f[:,1],color='b')
+    plt.plot(f[:,0],f[:,1],color='b',label='Pareto front') 
+    plt.legend()
+
+    plt.draw()
     plt.ioff()
+
+    countFig = countFig + NObj*(NObj - 1)/2
 
     finalPop.append(Pt)
 
@@ -251,44 +259,44 @@ if(nReps == 1):
 
     ##plt.show()
     axes = plt.gca()
-    axes.set_ylim([0,5])
+    axes.set_ylim([0,1])
 
-    plt.savefig(''.join([function,'.png']), bbox_inches='tight')
+    plt.savefig(''.join(['../figures/',function,'.png']), bbox_inches='tight')
 
     plt.figure(2)
     plt.plot(hvValues)
-    plt.savefig(''.join(['HV_',function,'.png']), bbox_inches='tight')
+    plt.savefig(''.join(['../figures/HV_',function,'.png']), bbox_inches='tight')
 
     # Save Population
-    with open(''.join(['Pop_',function,'_NSGA3','.pk1']), 'wb') as output:
+    with open(''.join(['files/Pop_',function,'_NSGA3','.pk1']), 'wb') as output:
         pickle.dump(finalPop, output, pickle.HIGHEST_PROTOCOL)
 
     # Save Hypervolume
-    with open(''.join(['HV_',function,'_NSGA3','.pk1']), 'wb') as output:
+    with open(''.join(['files/HV_',function,'_NSGA3','.pk1']), 'wb') as output:
         pickle.dump(hvValues, output, pickle.HIGHEST_PROTOCOL)
 
     # Save Elapsed time
-    with open(''.join(['time_',function,'_NSGA3','.pk1']), 'wb') as output:
+    with open(''.join(['files/time_',function,'_NSGA3','.pk1']), 'wb') as output:
         pickle.dump(extime, output, pickle.HIGHEST_PROTOCOL)
 
 else:
 
-    print 'average hypervolume=', mean(hvValues[:,-1])
-    print 'best hypervolume=', max(hvValues[:,-1])
+    print 'Average hypervolume=', mean(hvValues[:,-1])
+    print 'Best hypervolume=', max(hvValues[:,-1])
 
-    plt.figure(countFig)
+    plt.figure(countFig+1)
     plt.plot(hvValues.mean(axis=0))
-    plt.savefig(''.join(['meanHV_',function,'.png']), bbox_inches='tight')
+    plt.savefig(''.join(['../figures/meanHV_',function,'.png']), bbox_inches='tight')
 
     # Save Population
-    with open(''.join(['Pop_',function,'_NSGA3','.pk1']), 'wb') as output:
+    with open(''.join(['files/Pop_',function,'_NSGA3','.pk1']), 'wb') as output:
         pickle.dump(finalPop, output, pickle.HIGHEST_PROTOCOL)
 
     # Save Hypervolume
-    with open(''.join(['HV_',function,'_NSGA3','.pk1']), 'wb') as output:
+    with open(''.join(['files/HV_',function,'_NSGA3','.pk1']), 'wb') as output:
         pickle.dump(hvValues, output, pickle.HIGHEST_PROTOCOL)
 
     # Save Elapsed time
-    with open(''.join(['time_',function,'_NSGA3','.pk1']), 'wb') as output:
+    with open(''.join(['files/time_',function,'_NSGA3','.pk1']), 'wb') as output:
         pickle.dump(extime, output, pickle.HIGHEST_PROTOCOL)
 

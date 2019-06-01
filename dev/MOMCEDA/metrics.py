@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.spatial.distance as scp
 from math import hypot,sqrt
-from PyGMO.util import hypervolume
+from pygmo import hypervolume
 
 def IGDmetric(Z,Zmin,A,function):
 
