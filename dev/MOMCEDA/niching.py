@@ -24,7 +24,7 @@ def niching(K,Pop,sizeEvol,weight,multiple=True):
         while (k < K):
 
             j = Pop.pi[F] # directions for members of the last front
-            matrixEval = c_[Pop.domCount[F],Pop.d[F,j],Pop.rho[j],Pop.rank[F],-Pop.hvCont[F]]
+            matrixEval = c_[Pop.rank[F],Pop.rho[j],Pop.d[F,j],-Pop.hvCont[F]]
             relSim = topsisEval(matrixEval,Pop.minim,weight) # TOPSIS ranking
             ind = F[argmax(relSim)] # Selected member to stay on population
             direct = Pop.pi[ind]

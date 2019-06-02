@@ -347,7 +347,7 @@ class Population:
                 weight = ones(2)
             i = arange(self.NPop)
             j = self.pi[i]
-            matrixEval = c_[self.d[i,j],self.rho[j]]
+            matrixEval = c_[self.rho[j],self.d[i,j]]
             
         if(rank == 'default'):
             if(len(weight) != self.NObj):
@@ -356,21 +356,21 @@ class Population:
             
 
         if(rank == 'hv'):
-            if(len(weight) != 5):
-                weight = ones(5)
+            if(len(weight) != 4):
+                weight = ones(4)
             i = arange(self.NPop)
             j = self.pi[i]
-            matrixEval = c_[self.domCount,self.d[i,j],self.rho[j],self.rank,-self.hvCont]
+            matrixEval = c_[self.rank,self.rho[j],self.d[i,j],-self.hvCont]
             relSim = topsisEval(matrixEval,self.minim,weight)
             ind = relSim.argsort()[::-1]
             globalRank[ind] = arange(1,self.NPop+1)
             
         elif(rank == 'all'):
-            if(len(weight) != 4):
-                weight = ones(4)
+            if(len(weight) != 5):
+                weight = ones(5)
             i = arange(self.NPop)
             j = self.pi[i]
-            matrixEval = c_[self.domCount,self.d[i,j],self.rho[j],self.rank]
+            matrixEval = c_[self.rank,self.rho[j],self.d[i,j],-self.hvCont,self.domCount]
             relSim = topsisEval(matrixEval,self.minim,weight)
             ind = relSim.argsort()[::-1]
             globalRank[ind] = arange(1,self.NPop+1)

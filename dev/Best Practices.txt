@@ -6,6 +6,8 @@ Do's:
 
 - If you are writing text in more than one language, make sure that every sentence is properly translated. Do not leave portions of the text available in only one language. This will avoid mistranslations by the readers.
 
+- Be careful with the working environments. I had some Python packages installed on my system before installing Anaconda. I had to install them again to make them work in the Anaconda environment, because the paths for the libraries of the working environments are different.
+
 Don'ts:
 
 - A paper version of the notebook featuring only the final results will not reflect any changes made in the source code.

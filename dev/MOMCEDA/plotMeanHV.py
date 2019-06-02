@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 function = 'ZDT3'
 nExec = 10
 
-with open(''.join(['HV_',function,'_NSGA3','.pk1']), 'r') as filename:
+with open(''.join(['../files/HV_',function,'_MOMCEDA','.pk1']), 'r') as filename:
     hv = pickle.load(filename)
 
 
