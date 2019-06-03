@@ -3,7 +3,8 @@ Reprodutibilidade em Pesquisa Computacional
 
 ### Instruções para reprodução do paper executável
 
-**1)** Faça o download deste repositório.
+**1)** Faça o download deste repositório para um diretório local, ou clone o repositório por meio do git executando o comando a seguir em um terminal: <br>
+*git clone https://github.com/pedro-mariano/IA369.git*
 
 **2)** Instale os módulos necessários para a execução do paper:
 
