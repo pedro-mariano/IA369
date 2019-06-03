@@ -13,9 +13,9 @@ Reprodutibilidade em Pesquisa Computacional
 Ambos podem ser obtidos por meio da instalação do Anaconda, disponível em https://www.anaconda.com/distribution/
 
 - PyGMO 2.11 (https://esa.github.io/pagmo2/install.html)
-- evoalgos 1.0 (https://pypi.org/project/evoalgos/)
-Siga as instruções de instalação disponíveis nas páginas de cada bilbioteca, ou execute os seguintes comando em um terminal:<br>
-*pip install pygmo*
+- evoalgos 1.0 (https://pypi.org/project/evoalgos/) <br>
+Siga as instruções de instalação disponíveis nas páginas de cada biblioteca, ou execute os seguintes comando em um terminal:<br>
+*pip install pygmo*<br>
 *pip install evoalgos*
 
 
