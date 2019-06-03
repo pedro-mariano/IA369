@@ -14,7 +14,7 @@ Ambos podem ser obtidos por meio da instalação do Anaconda, disponível em htt
 
 - PyGMO 2.11 (https://esa.github.io/pagmo2/install.html)
 - evoalgos 1.0 (https://pypi.org/project/evoalgos/) <br>
-Siga as instruções de instalação disponíveis nas páginas de cada biblioteca, ou execute os seguintes comando em um terminal:<br>
+Siga as instruções de instalação disponíveis nas páginas de cada biblioteca, ou execute os seguintes comandos em um terminal:<br>
 *pip install pygmo*<br>
 *pip install evoalgos*
 
