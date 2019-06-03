@@ -13,7 +13,6 @@ Ambos podem ser obtidos por meio da instalação do Anaconda, disponível em htt
 
 - PyGMO 2.11 (https://esa.github.io/pagmo2/install.html)
 Instale a biblioteca pygmo por meio do conda, executando os seguintes comandos em um terminal:
-
 *conda config --add channels conda-forge* <br>
 *conda install pygmo*
 
