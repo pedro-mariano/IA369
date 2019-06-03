@@ -12,7 +12,7 @@ Reprodutibilidade em Pesquisa Computacional
 Ambos podem ser obtidos por meio da instalação do Anaconda, disponível em https://www.anaconda.com/distribution/
 
 - PyGMO 2.11 (https://esa.github.io/pagmo2/install.html)
-Instale a biblioteca pygmo por meio do conda, executando os seguintes comandos em um terminal:
+Instale a biblioteca pygmo por meio do conda, executando os seguintes comandos em um terminal:<br>
 *conda config --add channels conda-forge* <br>
 *conda install pygmo*
 
