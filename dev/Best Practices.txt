@@ -8,6 +8,8 @@ Do's:
 
 - Be careful with the working environments. I had some Python packages installed on my system before installing Anaconda. I had to install them again to make them work in the Anaconda environment, because the paths for the libraries of the working environments are different.
 
+- When using Anaconda to install new libraries/packages, make sure that the Anaconda repository has writing privileges, otherwise installation will fail
+
 Don'ts:
 
 - A paper version of the notebook featuring only the final results will not reflect any changes made in the source code.

@@ -11,6 +11,7 @@ from hv import *
 from avgDist import *
 from metrics import *
 import time
+import json
 
 # MOMCEDA main loop 
 
@@ -60,6 +61,7 @@ def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
 
     # Plot parameters
     color = plt.cm.get_cmap('Reds') 
+    deltac = 0.3
     ObjNames = ['f1', 'f2','f3']
     scale = 1.0/(maxObj - minObj)
     center = array([0.0,0.0,0.0])
@@ -99,6 +101,9 @@ def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
     dec = 1 # decay type:1 - Linear, 2 - Exponential, 3 - Logarithmic
     coefGau = calc_coefGau(NPop,dec)
 
+    with open(''.join(['../dev/pareto_front/zdt',function[3],'_front.json'])) as optimal_front_data:
+        optimal_front = json.load(optimal_front_data)
+
     for nExec in arange(nReps,dtype=int):
 
         start = time.time()
@@ -113,7 +118,13 @@ def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
         Pt.topsisPop() # Rank within each front
         Qt = Population(NPop, Nvar, Vmin, Vmax, NObj, minim, function) # Offspring population
 
-        plt.ion()
+        if(RTPlot):
+            #plt.ion()
+            plt.title('Population at execution %d' %(nExec+1))
+            f = array(optimal_front)
+            plt.plot(f[:,0],f[:,1],color='b',label='Pareto front') 
+            plt.legend()
+            plt.draw()
 
         ## Main loop ##
 
@@ -174,9 +185,9 @@ def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
                 Pt = St.removeMembers(indRemove, StObj) # Next generation's population
             
             if(RTPlot):
-                Pt.plot(color(float(t)/NGer), scale, center, ObjNames, countFig)
-                axes = plt.gca()
-                axes.set_ylim([0,1])
+                Pt.plot(color((1-deltac)*float(t)/NGer+deltac), scale, center, ObjNames, countFig)
+                #axes = plt.gca()
+                #axes.set_ylim([0,1])
             Pt.topsisPop(weight,rank=rankType) # Rank within each front
             Qt = Pt.offspringPop(coefGau,sigma,pMut,spread,pSwitch) # Selection, recombination and mutation
 
@@ -202,11 +213,6 @@ def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
             
         print 'Execution ',nExec+1, ' completed in ',extime[-1],' seconds'
         print 'Hypervolume = ',hvValues[nExec,-1]
-
-        import json
-        with open(''.join(['../dev/pareto_front/zdt',function[3],'_front.json'])) as optimal_front_data:
-            optimal_front = json.load(optimal_front_data)
-
         print 'Convergence metric = ',convergence(Pt.obj.tolist(), optimal_front)
 
     ##    normIgd,Zint = normIGDmetric(ZRef,objRec.objIdeal,a,Pt.obj,function)
@@ -227,14 +233,13 @@ def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
         ##plt.scatter(f[::step,0],f[::step,1],s=1,color='b')
 
         if(RTPlot):
-            plt.title('Population at execution %d' %(nExec+1))
-            f = array(optimal_front)
-            Pt.plot(color(float(t)/NGer), scale, center, ObjNames, countFig)
-            plt.plot(f[:,0],f[:,1],color='b',label='Pareto front') 
-            plt.legend()
-
+            Pt.plot(color((1-deltac)*float(t)/NGer+deltac), scale, center, ObjNames, countFig)
+            axes = plt.gca()
+            axes.set_ylim([0,1])
             plt.draw()
-            plt.ioff()
+            #plt.ioff()
+            plt.show(block=True)
+            #plt.savefig(''.join(['../figures/',function,'.png']), bbox_inches='tight')
 
         countFig = countFig + NObj*(NObj - 1)/2
 

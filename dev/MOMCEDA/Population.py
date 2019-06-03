@@ -408,8 +408,8 @@ class Population:
             for i in arange(self.NObj):
                  for j in arange(i+1,self.NObj):
 
-                     plt.figure(pair_n + countFig)
-                     plt.plot(obj[:,i]*scale[i]+center[i],obj[:,j]*scale[j]+center[j],'.',color=color)
+                     plt.figure(pair_n + countFig + 1)
+                     plt.plot(obj[:,i]*scale[i]+center[i],obj[:,j]*scale[j]+center[j],'.',color=color,markersize=3)
                      plt.xlabel(names[i])
                      plt.ylabel(names[j])
                      plt.draw()
