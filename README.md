@@ -13,12 +13,11 @@ Reprodutibilidade em Pesquisa Computacional
 Ambos podem ser obtidos por meio da instalação do Anaconda, disponível em https://www.anaconda.com/distribution/
 
 - PyGMO 2.11 (https://esa.github.io/pagmo2/install.html)
-- evoalgos 1.0 (https://pypi.org/project/evoalgos/) <br>
+- DEAP 1.2.2 (https://deap.readthedocs.io/en/master/installation.html) <br>
 Siga as instruções de instalação disponíveis nas páginas de cada biblioteca, ou execute os seguintes comandos em um terminal:<br>
 *pip install pygmo*<br>
-*pip install evoalgos*
+*pip install deap*
 
+**3)** Abra o Jupyter Notebook e execute o arquivo MOMCEDA.ipynb localizado na pasta *deliver/*.
 
-
-
-
+Obs: a execução dos experimentos modifica os arquivos na pasta *dev/files*, que são utilizados para realizar a análise de resultados. Se os experimentos forem interrompidos antes de sua conclusão, a análise de resultados pode apresentar erros. Um back-up dos arquivos originais da pasta *dev/files* está localizado na pasta *dev/files_bkup*.

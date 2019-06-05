@@ -2,13 +2,17 @@ Best Practices Journal
 
 Do's:
 
-- Make sure to keep track of seed values that were used to generate random numbers to guarantee reproducibility
+- Make sure to keep track of seed values that were used to generate random numbers to guarantee reproducibility.
 
 - If you are writing text in more than one language, make sure that every sentence is properly translated. Do not leave portions of the text available in only one language. This will avoid mistranslations by the readers.
 
 - Be careful with the working environments. I had some Python packages installed on my system before installing Anaconda. I had to install them again to make them work in the Anaconda environment, because the paths for the libraries of the working environments are different.
 
-- When using Anaconda to install new libraries/packages, make sure that the Anaconda repository has writing privileges, otherwise installation will fail
+- When using Anaconda to install new libraries/packages, make sure that the Anaconda repository has writing privileges, otherwise installation will fail.
+
+- If your code reads from or writes to files in other directories, be careful when moving your files, because the relative paths to the files accessed by your code may change.
+
+- To validate your program, run smaller instances of your experiments, to make sure there are no bugs in the code before running a complete version of the experiments.
 
 Don'ts:
 

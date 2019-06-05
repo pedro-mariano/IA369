@@ -28,18 +28,26 @@ import json
 ##    weight =  Array of weights used for TOPSIS 
 ##              Weight order: rank, rho, distRefPoint, hvCont
 
-def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
+def runMOMCEDA(NPop,NEval,function,Nref,nReps,RTPlot,refPoint,weight,seed=None):
+
+    print 'Running MOMCEDA\n'
 
     NGer = NEval/NPop - 1 # Number of generations
     NObj = 2 # Number of objectives to optimize
     minim = 1 # minim = 1 if minimizing objectives, minim = 0 otherwise
     p = Nref - 1 # Number of objective axes divisions to generate structured ref. points
 
+    random.seed(seed)
+
     if(function == 'ZDT4'):
+        Nvar = 10
         Vmin = append(0,-5*ones(Nvar-1)) # Limits of chromosome values
         Vmax = append(1,5*ones(Nvar-1))
         sigma = append(1.0,0.1*ones(Nvar-1)) # Mutation parameter
     else:
+        Nvar = 30
+        if(function == 'ZDT6'):
+            Nvar = 10
         Vmin = 0.0*ones(Nvar) # Limits of chromosome values
         Vmax = 1.0*ones(Nvar)
         sigma = 1.0*ones(Nvar)/2.0 # Mutation parameter
@@ -56,6 +64,7 @@ def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
     sampleAll = True #sampleAll: if true, all members from parent population are sampled with the TOPSIS rank
 
     hvValues = zeros((nReps,NGer))
+    conv = []
     finalPop = []
     extime = []
 
@@ -210,10 +219,12 @@ def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
 
         end = time.time()
         extime.append(end - start)
+
+        conv.append(convergence(Pt.obj.tolist(), optimal_front))
             
-        print 'Execution ',nExec+1, ' completed in ',extime[-1],' seconds'
         print 'Hypervolume = ',hvValues[nExec,-1]
-        print 'Convergence metric = ',convergence(Pt.obj.tolist(), optimal_front)
+        print 'Convergence metric = ',conv[nExec]
+        print 'Execution ',nExec+1, ' completed in ',extime[-1],' seconds \n'
 
     ##    normIgd,Zint = normIGDmetric(ZRef,objRec.objIdeal,a,Pt.obj,function)
     ##    igd = IGDmetric(ZRef,objRec.objIdeal,Pt.obj,function)[0]
@@ -293,27 +304,31 @@ def runMOMCEDA(NPop,NEval,Nvar,function,Nref,nReps,RTPlot,refPoint,weight):
 ##        with open(''.join(['../dev/files/time_',function,'_MOMCEDA','.pk1']), 'wb') as output:
 ##            pickle.dump(extime, output, pickle.HIGHEST_PROTOCOL)
 
-    if(nReps > 1):
+    print 'Average hypervolume=', mean(hvValues[:,-1])
+    print 'Best hypervolume=', max(hvValues[:,-1])
 
-        print '\nAverage hypervolume=', mean(hvValues[:,-1])
-        print 'Best hypervolume=', max(hvValues[:,-1])
+##        plt.figure(countFig+1,figsize=(12, 12))
+##        plt.title('Average hypervolume evolution for %s problem' %(function), fontsize=18)
+##        plt.xlabel('Generations', fontsize=18)
+##        plt.ylabel('Average hypervolume', fontsize=18)
+##        plt.plot(arange(1,NGer+1),hvValues.mean(axis=0))
+##        plt.savefig(''.join(['../figures/meanHV_',function,'.png']), bbox_inches='tight')
 
-        plt.figure(countFig+1,figsize=(12, 12))
-        plt.title('Average hypervolume evolution for %s problem' %(function), fontsize=18)
-        plt.xlabel('Generations', fontsize=18)
-        plt.ylabel('Average hypervolume', fontsize=18)
-        plt.plot(arange(1,NGer+1),hvValues.mean(axis=0))
-        plt.savefig(''.join(['../figures/meanHV_',function,'.png']), bbox_inches='tight')
+    # Save Population
+    with open(''.join(['../dev/files/Pop_',function,'_MOMCEDA','.pk1']), 'wb') as output:
+        pickle.dump(finalPop, output, pickle.HIGHEST_PROTOCOL)
 
-        # Save Population
-        with open(''.join(['../dev/files/Pop_',function,'_MOMCEDA','.pk1']), 'wb') as output:
-            pickle.dump(finalPop, output, pickle.HIGHEST_PROTOCOL)
+    # Save Hypervolume
+    with open(''.join(['../dev/files/HV_',function,'_MOMCEDA','.pk1']), 'wb') as output:
+        pickle.dump(hvValues, output, pickle.HIGHEST_PROTOCOL)
 
-        # Save Hypervolume
-        with open(''.join(['../dev/files/HV_',function,'_MOMCEDA','.pk1']), 'wb') as output:
-            pickle.dump(hvValues, output, pickle.HIGHEST_PROTOCOL)
+    # Save Elapsed time
+    with open(''.join(['../dev/files/time_',function,'_MOMCEDA','.pk1']), 'wb') as output:
+        pickle.dump(extime, output, pickle.HIGHEST_PROTOCOL)
 
-        # Save Elapsed time
-        with open(''.join(['../dev/files/time_',function,'_MOMCEDA','.pk1']), 'wb') as output:
-            pickle.dump(extime, output, pickle.HIGHEST_PROTOCOL)
+    # Save Convergence
+    with open(''.join(['../dev/files/conv_',function,'_MOMCEDA.json']),'w') as outfile:
+        json.dump(conv,outfile)
+
+    print '\nMOMCEDA finished all experiments\n'
 
