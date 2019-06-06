@@ -14,6 +14,8 @@ Do's:
 
 - To validate your program, run smaller instances of your experiments, to make sure there are no bugs in the code before running a complete version of the experiments.
 
+- To verify if your work is reproducible, follow your own instructions in a clean environment from the beginning. This helps finding dependencies that may not be listed in your instructions.
+
 Don'ts:
 
 - A paper version of the notebook featuring only the final results will not reflect any changes made in the source code.
