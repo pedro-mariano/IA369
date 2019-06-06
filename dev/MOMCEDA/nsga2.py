@@ -16,9 +16,8 @@
 import array
 import random
 import json
-import time
-
 import numpy
+import time
 
 from math import sqrt
 
@@ -40,8 +39,12 @@ def uniform(low, up, size=None):
     except TypeError:
         return [random.uniform(a, b) for a, b in zip([low] * size, [up] * size)]
 
-def main(NGEN,MU,refPoint,function):
+def main(function,NGEN,MU,refPoint):
 
+    # Problem definition
+    # Functions zdt1, zdt2, zdt3, zdt6 have bounds [0, 1]
+    # Functions zdt4 has bounds x1 = [0, 1], xn = [-5, 5], with n = 2, ..., 10
+    # Functions zdt1, zdt2, zdt3 have 30 dimensions, zdt4 and zdt6 have 10
     if(function == 'ZDT4'):
         NDIM = 10
         BOUND_LOW, BOUND_UP = [0.0] + [-5.0]*(NDIM-1), [1.0] + [5.0]*(NDIM-1)
@@ -51,22 +54,30 @@ def main(NGEN,MU,refPoint,function):
             NDIM = 10
         BOUND_LOW, BOUND_UP = [0.0]*NDIM, [1.0]*NDIM
 
+##    print 'refPoint =' ,refPoint
+##    print 'NDIM=',NDIM
+##    print 'BOUNDS=',BOUND_LOW,BOUND_UP
+##    print 'NGEN=', NGEN
+##    print 'MU=',MU
+
     toolbox.register("attr_float", uniform, BOUND_LOW, BOUND_UP, NDIM)
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.attr_float)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
     toolbox.register("evaluate", eval(''.join(['benchmarks.zdt',function[3]])))
-    toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=BOUND_LOW, up=BOUND_UP, eta=20.0)
+    toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=BOUND_LOW, up=BOUND_UP, eta=30.0)
     toolbox.register("mutate", tools.mutPolynomialBounded, low=BOUND_LOW, up=BOUND_UP, eta=20.0, indpb=1.0/NDIM)
     toolbox.register("select", tools.selNSGA2)
 
-    CXPB = 0.9
+    CXPB = 1.0
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     # stats.register("avg", numpy.mean, axis=0)
     # stats.register("std", numpy.std, axis=0)
     stats.register("min", numpy.min, axis=0)
     stats.register("max", numpy.max, axis=0)
+
+    hvValues = []
     
     logbook = tools.Logbook()
     logbook.header = "gen", "evals", "std", "min", "avg", "max"
@@ -79,15 +90,15 @@ def main(NGEN,MU,refPoint,function):
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
 
+    hvValues.append(hypervolume(pop, refPoint))
+
     # This is just to assign the crowding distance to the individuals
     # no actual selection is done
     pop = toolbox.select(pop, len(pop))
     
     record = stats.compile(pop)
     logbook.record(gen=0, evals=len(invalid_ind), **record)
-    # print(logbook.stream)
-
-    hv = []
+    #print(logbook.stream)
 
     # Begin the generational process
     for gen in range(1, NGEN):
@@ -113,84 +124,78 @@ def main(NGEN,MU,refPoint,function):
         pop = toolbox.select(pop + offspring, MU)
         record = stats.compile(pop)
         logbook.record(gen=gen, evals=len(invalid_ind), **record)
-        # print(logbook.stream)
+        #print(logbook.stream)
 
-        hv.append(hypervolume(pop, refPoint))
+        hvValues.append(hypervolume(pop, refPoint))
 
-    print 'Hypervolume =', hv[-1]
+    print 'Hypervolume = ', hvValues[-1]
 
-    return pop, logbook, hv
+    return pop, logbook, hvValues
         
 def runNSGA2(seed,function,nReps,NEval,NPop,refPoint):
 
     print 'Running NSGA-II\n'
 
-    random.seed(seed)
-    
-    with open(''.join(['pareto_front/zdt',function[3],'_front.json'])) as optimal_front_data:
+    with open(''.join(['../dev/pareto_front/zdt',function[3],'_front.json'])) as optimal_front_data:
         optimal_front = json.load(optimal_front_data)
     # Use 500 of the 1000 points in the json file
     # optimal_front = sorted(optimal_front[i] for i in range(0, len(optimal_front), 2))
 
-    # Problem definition
-    # Functions zdt1, zdt2, zdt3, zdt6 have bounds [0, 1]
-    # Functions zdt4 has bounds x1 = [0, 1], xn = [-5, 5], with n = 2, ..., 10
-    # Functions zdt1, zdt2, zdt3 have 30 dimensions, zdt4 and zdt6 have 10
-        
-    fronts = []
     hvValues = []
     conv = []
+    diver = []
+    fronts = []
 
     NGEN = NEval/NPop
 
-    for nExec in range(nReps):
+    random.seed(seed)
+   
+    for nexec in xrange(nReps):
+
+        print 'Starting execution %d ...' % (nexec+1)
 
         start = time.time()
+    
+        pop, stats, hv = main(function,NGEN,NPop,refPoint)
+        hvValues.append(hv)
+        #pop.sort(key=lambda x: x.fitness.values)
 
-        print 'Starting exection %d ...' %(nExec+1)
-
-        pop, stats, hv = main(NGEN,NPop,refPoint,function)
+        # print(stats)
+        conv.append(convergence(pop, optimal_front))
+        #diver.append(diversity(pop, optimal_front[0], optimal_front[-1]))
+        print 'Convergence metric = ', conv[nexec]
+        #print("Diversity: ", diver[nexec])
+               
+        front = numpy.array([ind.fitness.values for ind in pop])
+        fronts.append(front.tolist())
+        #optimal_front = numpy.array(optimal_front)
+        #plt.scatter(optimal_front[:,0], optimal_front[:,1], c="r")
+        #plt.scatter(front[:,0], front[:,1], c="b")
+        #plt.axis("tight")
 
         end = time.time()
-        
-        # pop.sort(key=lambda x: x.fitness.values)
-        
-        # print(stats)
+        print 'Execution %d  completed in  %f seconds\n' % (nexec+1,end-start)
 
-        fronts.append(pop)
-        
-        hvValues.append(hv)
-        
-        conv.append(convergence(pop, optimal_front))
-        print 'Convergence metric = ',conv[nExec]
+##        if(nReps == 1):
+##            plt.show()
+##        else:
+##            plt.savefig(''.join(['results/figures/NSGA2_',function,'_exec',str(nexec),'.png']), bbox_inches='tight')
 
-        print 'Execution %d completed in %f seconds\n' %(nExec+1,end-start)
-                    
-        # print("Diversity: ", diversity(pop, optimal_front[0], optimal_front[-1]))
-        
-        # import matplotlib.pyplot as plt
-        # import numpy
-        
-        # front = numpy.array([ind.fitness.values for ind in pop])
-        # optimal_front = numpy.array(optimal_front)
-        # plt.scatter(optimal_front[:,0], optimal_front[:,1], c="r")
-        # plt.scatter(front[:,0], front[:,1], c="b")
-        # plt.axis("tight")
-        # plt.show()
+    finalHV = [x[-1] for x in hvValues]
+    print 'Average hypervolume=', sum(finalHV)/nReps
+    print 'Best hypervolume=', max(finalHV)
 
-    # Save Population
-    #with open(''.join(['../dev/files/Pop_',function,'_NSGA2.json']), 'w') as output:
-    #    json.dump(fronts, output)
+    with open(''.join(['../dev/files/Pop_',function,'_NSGA2.json']),'w') as outfile:
+        json.dump(fronts,outfile)
 
-    # Save Hypervolume
-    with open(''.join(['../dev/files/HV_',function,'_NSGA2.json']), 'w') as output:
-        json.dump(hvValues, output)
+    with open(''.join(['../dev/files/HV_',function,'_NSGA2.json']),'w') as outfile:
+        json.dump(hvValues,outfile)
 
-    # Save Convergence
     with open(''.join(['../dev/files/conv_',function,'_NSGA2.json']),'w') as outfile:
         json.dump(conv,outfile)
 
-    print '\nNSGA-II finished all experiments\n'
+##    with open(''.join(['../dev/files/diver_',function,'_NSGA2.json']),'w') as outfile:
+##        json.dump(diver,outfile)
 
-    
+    print '\nNSGA-II finished all experiments\n'
 
