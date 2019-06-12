@@ -4,7 +4,7 @@ Reprodutibilidade em Pesquisa Computacional
 ### Instruções para reprodução do paper executável
 
 **1)** Faça o download deste repositório para um diretório local, ou clone o repositório por meio do git executando o comando a seguir em um terminal: <br>
-*git clone https://github.com/pedro-mariano/IA369.git*
+*$ git clone https://github.com/pedro-mariano/IA369.git*
 
 **2)** Instale os módulos necessários para a execução do paper:
 
@@ -15,7 +15,7 @@ Ambos podem ser obtidos por meio da instalação do Anaconda, disponível em htt
 - PyGMO 2.11 (https://esa.github.io/pagmo2/install.html)
 - DEAP 1.2.2 (https://deap.readthedocs.io/en/master/installation.html) <br>
 Siga as instruções de instalação disponíveis nas páginas de cada biblioteca, ou execute os seguintes comandos em um terminal:<br>
-*pip install pygmo deap*
+*$ pip install pygmo deap*
 
 **3)** Abra o Jupyter Notebook e execute o arquivo MOMCEDA.ipynb localizado na pasta *deliver/*.
 
