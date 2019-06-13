@@ -12,10 +12,12 @@ Reprodutibilidade em Pesquisa Computacional
 - Jupyter Notebook 5.7.8 <br>
 Ambos podem ser obtidos por meio da instalação do Anaconda, disponível em https://www.anaconda.com/distribution/
 
+- NumPy 1.16.4 (https://www.numpy.org/)
+- Matplotlib 2.2.4 (https://matplotlib.org/users/installing.html)
 - PyGMO 2.11 (https://esa.github.io/pagmo2/install.html)
 - DEAP 1.2.2 (https://deap.readthedocs.io/en/master/installation.html) <br>
 Siga as instruções de instalação disponíveis nas páginas de cada biblioteca, ou caso possua o pip instalado, execute o seguinte comando em um terminal:<br>
-*$ pip install pygmo deap*
+*$ pip install numpy matplotlib pygmo deap*
 
 **3)** Abra o Jupyter Notebook e execute o arquivo MOMCEDA.ipynb localizado na pasta *deliver/*.
 
