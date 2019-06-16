@@ -2,7 +2,7 @@ Best Practices Journal
 
 Do's:
 
-- Make sure to keep track of seed values that were used to generate random numbers to guarantee reproducibility.
+- Make sure to keep track of seed values that were used to generate random numbers to guarantee reproducibility. Also, make sure that all random number generators used by your code have been seeded, and keep in mind that if you re-run code cells in interactive environments, such as Jupyter Notebook, without setting again the seed values for the generators, you will not reproduce your previous results.
 
 - If you are writing text in more than one language, make sure that every sentence is properly translated. Do not leave portions of the text available in only one language. This will avoid mistranslations by the readers.
 
