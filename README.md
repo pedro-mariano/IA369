@@ -35,11 +35,11 @@ $ pip install numpy scipy matplotlib pygmo deap
 
 **2)** Navegue até o diretório local onde foi feito o download deste repositório. No Linux, execute o comando:
 ```
-cd /home/user/IA369
+$ cd /home/user/IA369
 ```
 **3)** Execute o comando a seguir para fazer o download da imagem Docker e executar o container:
 ```
-docker run -p 8888:8888 pedromarianosb/momceda
+$ docker run -p 8888:8888 pedromarianosb/momceda
 ```
 **4)** Abra um navegador e acesse o endereço http://localhost:8888 para abrir o Jupyter Notebook. Em seguida, abra o arquivo MOMCEDA.ipynb localizado na pasta *deliver/*. 
 
