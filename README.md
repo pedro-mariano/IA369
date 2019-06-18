@@ -4,8 +4,9 @@ Reprodutibilidade em Pesquisa Computacional
 ### Instruções para reprodução do paper executável
 
 Faça o download deste repositório para um diretório local. Caso possua o Git instalado, você também pode clonar o repositório executando o comando a seguir em um terminal: <br>
-*$ git clone https://github.com/pedro-mariano/IA369.git*
-
+```
+$ git clone https://github.com/pedro-mariano/IA369.git
+```
 Há duas opções para instalar as dependências necessárias para reproduzir o paper executável: manualmente ou via Docker. Recomenda-se a instalação via Docker.
 
 ## Instalação manual
@@ -22,17 +23,25 @@ Ambos podem ser obtidos por meio da instalação do Anaconda, disponível em htt
 - PyGMO 2.11 (https://esa.github.io/pagmo2/install.html)
 - DEAP 1.2.2 (https://deap.readthedocs.io/en/master/installation.html) <br>
 Siga as instruções de instalação disponíveis nas páginas de cada biblioteca, ou caso possua o pip instalado, execute o seguinte comando em um terminal:<br>
-*$ pip install numpy scipy matplotlib pygmo deap*
+```
+$ pip install numpy scipy matplotlib pygmo deap
+```
 
 **2)** Abra o Jupyter Notebook e execute o arquivo MOMCEDA.ipynb localizado na pasta *deliver/*.
-
-Obs: a execução dos experimentos modifica os arquivos na pasta *dev/files*, que são utilizados para realizar a análise de resultados. Se os experimentos forem interrompidos antes de sua conclusão, a análise de resultados pode apresentar erros. Um back-up dos arquivos originais da pasta *dev/files* está localizado na pasta *dev/files_bkup*.
 
 ## Instalação via Docker
 
 **1)** Caso não possua o Docker CE instalado, faça o download e instale-o na página da plataforma: https://docs.docker.com/install/
 
-**2)** 
+**2)** Navegue até o diretório local onde foi feito o download deste repositório. No Linux, execute o comando:
+```
+cd /home/user/IA369
+```
+**3)** Execute o comando a seguir para fazer o download da imagem Docker e executar o container:
+```
+docker run -p 8888:8888 pedromarianosb/momceda
+```
+**4)** Abra um navegador e acesse o endereço http://localhost:8888 para abrir o Jupyter Notebook. Em seguida, abra o arquivo MOMCEDA.ipynb localizado na pasta *deliver/*. 
 
 ### Workflow
 
