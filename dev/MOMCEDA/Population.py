@@ -410,9 +410,9 @@ class Population:
 
                      plt.figure(pair_n + countFig + 1)
                      plt.plot(obj[:,i]*scale[i]+center[i],obj[:,j]*scale[j]+center[j],'.',color=color,markersize=3)
-                     plt.xlabel(names[i])
-                     plt.ylabel(names[j])
-                     plt.draw()
+                     plt.xlabel(names[i],fontsize=18)
+                     plt.ylabel(names[j],fontsize=18)
+                     plt.plot()
                      pair_n = pair_n + 1
 
-        plt.pause(0.05)
+        #plt.pause(0.05)

@@ -129,11 +129,12 @@ def runMOMCEDA(NPop,NEval,function,Nref,nReps,RTPlot,refPoint,weight,seed=None):
 
         if(RTPlot):
             #plt.ion()
-            plt.title('Population at execution %d' %(nExec+1))
+            plt.figure(figsize=(12,12))
+            plt.title('Population at execution %d' %(nExec+1),fontsize=18)
             f = array(optimal_front)
             plt.plot(f[:,0],f[:,1],color='b',label='Pareto front') 
-            plt.legend()
-            plt.draw()
+            plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=18)
+            #plt.draw()
 
         ## Main loop ##
 
@@ -245,11 +246,11 @@ def runMOMCEDA(NPop,NEval,function,Nref,nReps,RTPlot,refPoint,weight,seed=None):
 
         if(RTPlot):
             Pt.plot(color((1-deltac)*float(t)/NGer+deltac), scale, center, ObjNames, countFig)
-            axes = plt.gca()
-            axes.set_ylim([0,1])
-            plt.draw()
+            #axes = plt.gca()
+            #axes.set_ylim([0,1])
+            #plt.draw()
             #plt.ioff()
-            plt.show(block=True)
+            plt.show()
             #plt.savefig(''.join(['../figures/',function,'.png']), bbox_inches='tight')
 
         countFig = countFig + NObj*(NObj - 1)/2
