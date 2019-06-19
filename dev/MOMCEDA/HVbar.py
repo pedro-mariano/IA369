@@ -21,21 +21,21 @@ plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
 plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
-def showHVBar(function,Nsamples,NEval):
+def showHVBar(function,Nsamples,NEval,NPop):
 
     algo = 'MOMCEDA'
     with open(''.join(['../dev/files/HV_',function,'_',algo,'.pk1']),'r') as filename:
         hv_MOMCEDA = pickle.load(filename)
 
-    Nsamples = 10
-    NEval = 20000
+    ##Nsamples = 10
+    ##NEval = 20000
 
     ##NGer = len(hv_MOMCEDA[0])
     ##gen_ind = (np.linspace(0,NGer-1,Nsamples+1)[1:]).astype(int)
     ##eval_ind = (gen_ind + 2)*100
 
     eval_ind = (np.linspace(0,NEval,Nsamples+1)[1:]).astype(int)
-    gen_ind = eval_ind/100 - 2
+    gen_ind = eval_ind/NPop - 2
 
     meanHV_MOMCEDA = hv_MOMCEDA[:,gen_ind].mean(axis=0)
     stdHV_MOMCEDA = hv_MOMCEDA[:,gen_ind].std(axis=0)
